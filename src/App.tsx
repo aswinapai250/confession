@@ -102,6 +102,17 @@ const Navbar = ({
         </div>
       </div>
       <div className="flex gap-3 items-center">
+        <button
+  onClick={() => setMemeSound(!memeSound)}
+  className="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary hover:bg-primary/20 transition"
+>
+  {memeSound ? "Meme Sound: ON" : "Meme Sound: OFF"}
+</button>
+
+<button 
+  onClick={onNotificationClick}
+  className="relative flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors"
+>
         {uid && (
           <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/20 rounded-full">
             <User className="size-3.5 text-primary" />
@@ -785,6 +796,7 @@ export default function App() {
   const [toast, setToast] = useState<{ message: string, type: 'success' | 'info' } | null>(null);
   const [myConfessions, setMyConfessions] = useState<string[]>([]);
   const [notifications, setNotifications] = useState<any[]>([]);
+  const [memeSound, setMemeSound] = useState(true);
   const [uid, setUid] = useState<string | null>(null);
   const socketRef = useRef<WebSocket | null>(null);
 
@@ -1015,7 +1027,7 @@ export default function App() {
       showToast("Confession shared successfully!");
 
     // play sound if category is 30+ or Teachers
-    if (data.category === "30+" || data.category === "Teachers") {
+    if (memeSound && (data.category === "30+" || data.category === "Teachers")) {
       const audio = new Audio("fahhhhh.mp3");
       audio.currentTime = 0;
       audio.play().catch(() => {});
