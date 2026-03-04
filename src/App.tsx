@@ -755,7 +755,7 @@ const LoginScreen = ({ onLogin }: { onLogin: (id: string) => void }) => {
           />
           <button 
             disabled={!id.trim()}
-            onClick={() => onLogin(id)}
+            onClick={() => onLogin(id || undefined)}
             className="w-full py-4 bg-primary rounded-2xl text-white font-bold text-lg hover:brightness-110 disabled:opacity-50 transition-all shadow-xl shadow-primary/20"
           >
             Enter the Shadows
@@ -806,11 +806,17 @@ export default function App() {
     }
   }, []);
 
-  const handleLogin = async (id: string) => {
-    setUid(id);
-    localStorage.setItem('uid', id);
-    showToast(`Welcome back, ${id}`, "info");
-  };
+  const handleLogin = async (id?: string) => {
+  const newId =
+    id && id.trim()
+      ? id
+      : "anon_" + Math.random().toString(36).substring(2, 8);
+
+  setUid(newId);
+  localStorage.setItem("uid", newId);
+
+  showToast(`Welcome ${newId}`, "info");
+};
 
   const handleLogout = () => {
     // Clear all local storage first
