@@ -846,26 +846,31 @@ export default function App() {
  const handleLogin = async (id?: string) => {
   const newId =
     id && id.trim()
-      ? id.trim().toLowerCase()
+      ? id.trim()
       : "anon_" + Math.random().toString(36).substring(2, 8);
 
   try {
-    const { data } = await supabase
+    // Check if UID already exists in database
+    const { data, error } = await supabase
       .from("confessions")
       .select("uid")
       .eq("uid", newId)
       .limit(1);
 
+    if (error) throw error;
+
     if (data && data.length > 0) {
-      showToast("Username already taken. Try another.", "info");
+      showToast("User ID already taken", "info");
       return;
     }
 
     setUid(newId);
     sessionStorage.setItem("uid", newId);
     showToast(`Welcome ${newId}`, "info");
+
   } catch (err) {
     console.error(err);
+    showToast("Login failed", "info");
   }
 };
 
