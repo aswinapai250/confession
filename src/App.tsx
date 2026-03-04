@@ -101,6 +101,7 @@ const Navbar = ({
           />
         </div>
       </div>
+  </header>
       <div className="flex gap-3 items-center">
 
   {/* Meme Sound Toggle */}
@@ -148,7 +149,6 @@ const Navbar = ({
   </button>
 
 </div>
-  </header>
 );
 
 const Sidebar = ({ 
