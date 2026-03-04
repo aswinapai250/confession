@@ -827,15 +827,14 @@ export default function App() {
   const socketRef = useRef<WebSocket | null>(null);
 
   const handleCategoryClick = (cat: string) => {
-    console.log("Selected category value:", cat);
-    setCategory(cat);
-    if (cat === "30+" || cat === "Teachers") {
-      console.log("Sound triggered");
-      const audio = new Audio("fahhhhh.mp3");
-      audio.currentTime = 0;
-      audio.play().catch(err => console.error("Audio error:", err));
-    }
-  };
+  setCategory(cat);
+
+  if (memeSound && (cat === "30+" || cat === "Teachers")) {
+    const audio = new Audio("fahhhhh.mp3");
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  }
+};
 
   useEffect(() => {
     const savedId = sessionStorage.getItem('uid');
@@ -1031,28 +1030,26 @@ export default function App() {
   }, [selectedConfessionId, uid]);
 
   const handlePost = async (data: any) => {
-    try {
-      // Ensure the payload matches the table schema exactly
-      // Column name must be "content", not "confession"
-      const payload = {
-        content: data.content,
-        category: data.category,
-        uid: uid
-      };
-      
-      console.log("Supabase Insert Payload:", payload);
-      
-      const { data: newPost, error } = await supabase
-        .from('confessions')
-        .insert([payload])
-        .select()
-        .single();
-      
-      if (error) throw error;
+  try {
+    const payload = {
+      content: data.content,
+      category: data.category,
+      uid: uid
+    };
 
-      showToast("Confession shared successfully!");
+    console.log("Supabase Insert Payload:", payload);
 
-    // play sound if category is 30+ or Teachers
+    const { data: newPost, error } = await supabase
+      .from('confessions')
+      .insert([payload])
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    showToast("Confession shared successfully!");
+
+    // 🔊 Meme sound (only if toggle is ON)
     if (memeSound && (data.category === "30+" || data.category === "Teachers")) {
       const audio = new Audio("fahhhhh.mp3");
       audio.currentTime = 0;
@@ -1060,10 +1057,11 @@ export default function App() {
     }
 
     fetchConfessions();
-    } catch (err) {
-      showToast("Failed to share confession", "info");
-    }
-  };
+
+  } catch (err) {
+    showToast("Failed to share confession", "info");
+  }
+};
 
   const handleReact = async (id: string, emoji: string) => {
     const col = getEmojiColumn(emoji);
