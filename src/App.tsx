@@ -22,7 +22,7 @@ import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { formatDistanceToNow } from 'date-fns';
 import { GoogleGenAI, Modality } from "@google/genai";
-import { supabase } from './lib/supabase';
+import { supabase } from './supabase';
 import { Confession, SortOption, CATEGORIES, MOODS, REACTIONS, Reply } from './types';
 
 const getEmojiColumn = (emoji: string): string | null => {
