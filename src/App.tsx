@@ -77,18 +77,27 @@ const Navbar = ({
   onLogout: () => void
 }) => (
   <header className="sticky top-0 z-50 flex items-center justify-between border-b border-primary/10 bg-background-dark/80 backdrop-blur-md px-6 py-3 md:px-10">
+
+    {/* Logo */}
     <div className="flex items-center gap-4">
       <div className="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
         <MessageSquare className="size-5" />
       </div>
-      <h2 className="text-xl font-bold tracking-tight text-slate-100">Confeshion</h2>
+      <h2 className="text-xl font-bold tracking-tight text-slate-100">
+        Confeshion
+      </h2>
     </div>
+
+    {/* Right Section */}
     <div className="flex flex-1 justify-end gap-4 items-center">
+
+      {/* Search */}
       <div className="hidden md:flex flex-col min-w-40 max-w-64 h-10">
         <div className="flex w-full flex-1 items-stretch rounded-full bg-primary/10 border border-primary/20">
           <div className="text-primary/60 flex items-center justify-center pl-4">
             <Search className="size-4" />
           </div>
+
           <input 
             className="flex w-full border-none bg-transparent focus:outline-none text-sm placeholder:text-primary/40 px-3" 
             placeholder="Search secrets..." 
@@ -101,54 +110,59 @@ const Navbar = ({
           />
         </div>
       </div>
-  </header>
+
+      {/* Buttons */}
       <div className="flex gap-3 items-center">
 
-  {/* Meme Sound Toggle */}
-  <button
-    onClick={() => setMemeSound(!memeSound)}
-    className="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary hover:bg-primary/20 transition"
-  >
-    {memeSound ? "Meme Sound: ON" : "Meme Sound: OFF"}
-  </button>
+        {/* Meme Toggle */}
+        <button
+          onClick={() => setMemeSound(!memeSound)}
+          className="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary hover:bg-primary/20 transition"
+        >
+          {memeSound ? "Meme Sound: ON" : "Meme Sound: OFF"}
+        </button>
 
-  {/* User Identity */}
-  {uid && (
-    <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/20 rounded-full">
-      <User className="size-3.5 text-primary" />
+        {/* User */}
+        {uid && (
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/20 rounded-full">
+            <User className="size-3.5 text-primary" />
 
-      <span className="text-xs font-bold text-primary truncate max-w-[80px]">
-        {uid}
-      </span>
+            <span className="text-xs font-bold text-primary truncate max-w-[80px]">
+              {uid}
+            </span>
 
-      <button
-        onClick={onLogout}
-        className="ml-1 text-slate-500 hover:text-red-400 transition-colors flex items-center gap-1"
-        title="Logout"
-      >
-        <LogOut className="size-3.5" />
-        <span className="hidden lg:inline text-[10px] font-bold uppercase">
-          Logout
-        </span>
-      </button>
+            <button 
+              onClick={onLogout}
+              className="ml-1 text-slate-500 hover:text-red-400 transition-colors flex items-center gap-1"
+              title="Logout"
+            >
+              <LogOut className="size-3.5" />
+              <span className="hidden lg:inline text-[10px] font-bold uppercase">
+                Logout
+              </span>
+            </button>
+          </div>
+        )}
+
+        {/* Notifications */}
+        <button 
+          onClick={onNotificationClick}
+          className="relative flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors"
+        >
+          <Bell className="size-5" />
+
+          {notifications.length > 0 && (
+            <span className="absolute top-0 right-0 size-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-background-dark">
+              {notifications.length}
+            </span>
+          )}
+        </button>
+
+      </div>
+
     </div>
-  )}
 
-  {/* Notification Bell */}
-  <button
-    onClick={onNotificationClick}
-    className="relative flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors"
-  >
-    <Bell className="size-5" />
-
-    {notifications.length > 0 && (
-      <span className="absolute top-0 right-0 size-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-background-dark">
-        {notifications.length}
-      </span>
-    )}
-  </button>
-
-</div>
+  </header>
 );
 
 const Sidebar = ({ 
