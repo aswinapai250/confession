@@ -63,18 +63,22 @@ function cn(...inputs: ClassValue[]) {
 
 // --- Components ---
 
-const Navbar = ({ 
-  onSearch, 
-  notifications, 
+const Navbar = ({
+  onSearch,
+  notifications,
   onNotificationClick,
   uid,
-  onLogout
-}: { 
-  onSearch: (val: string) => void, 
-  notifications: any[], 
-  onNotificationClick: () => void,
-  uid: string | null,
+  onLogout,
+  memeSound,
+  setMemeSound
+}: {
+  onSearch: (val: string) => void
+  notifications: any[]
+  onNotificationClick: () => void
+  uid: string | null
   onLogout: () => void
+  memeSound: boolean
+  setMemeSound: React.Dispatch<React.SetStateAction<boolean>>
 }) => (
   <header className="sticky top-0 z-50 flex items-center justify-between border-b border-primary/10 bg-background-dark/80 backdrop-blur-md px-6 py-3 md:px-10">
 
@@ -806,6 +810,7 @@ const LoginScreen = ({ onLogin }: { onLogin: (id: string) => void }) => {
 // --- Main App ---
 
 export default function App() {
+  const [memeSound, setMemeSound] = useState(true);
   const [confessions, setConfessions] = useState<Confession[]>([]);
   const [activeConfessions, setActiveConfessions] = useState<Confession[]>([]);
   const [sort, setSort] = useState<SortOption>('trending');
@@ -818,7 +823,6 @@ export default function App() {
   const [toast, setToast] = useState<{ message: string, type: 'success' | 'info' } | null>(null);
   const [myConfessions, setMyConfessions] = useState<string[]>([]);
   const [notifications, setNotifications] = useState<any[]>([]);
-  const [memeSound, setMemeSound] = useState(true);
   const [uid, setUid] = useState<string | null>(null);
   const socketRef = useRef<WebSocket | null>(null);
 
@@ -1239,6 +1243,9 @@ export default function App() {
         onNotificationClick={() => setIsNotificationModalOpen(true)}
         uid={uid}
         onLogout={handleLogout}
+       memeSound={memeSound}
+      setMemeSound={setMemeSound}
+
       />
       
       {/* Toast Notification */}
