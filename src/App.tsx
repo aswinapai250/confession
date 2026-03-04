@@ -809,15 +809,27 @@ export default function App() {
  const handleLogin = async (id?: string) => {
   const newId =
     id && id.trim()
-      ? id.trim()
+      ? id.trim().toLowerCase()
       : "anon_" + Math.random().toString(36).substring(2, 8);
 
-  setUid(newId);
+  try {
+    const { data } = await supabase
+      .from("confessions")
+      .select("uid")
+      .eq("uid", newId)
+      .limit(1);
 
-  // store correct value
-  sessionStorage.setItem("uid", newId);
+    if (data && data.length > 0) {
+      showToast("Username already taken. Try another.", "info");
+      return;
+    }
 
-  showToast(`Welcome ${newId}`, "info");
+    setUid(newId);
+    sessionStorage.setItem("uid", newId);
+    showToast(`Welcome ${newId}`, "info");
+  } catch (err) {
+    console.error(err);
+  }
 };
 
   const handleLogout = () => {
