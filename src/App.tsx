@@ -1389,6 +1389,15 @@ export default function App() {
 
       {/* Login Overlay */}
       {!uid && <LoginScreen onLogin={handleLogin} />}
+      <footer className="w-full border-t border-white/5 mt-20 py-6 text-center text-xs text-slate-500">
+        <p className="mb-2">
+          Confeshion — An anonymous social experiment exploring privacy-first interactions.
+        </p>
+  <p className="mt-1 opacity-70">
+    All posts are anonymous. Do not share personal or sensitive information.
+  </p>
+</footer>
+
     </div>
   );
 }
