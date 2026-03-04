@@ -800,7 +800,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    const savedId = localStorage.getItem('uid');
+    const savedId = sessionStorage.getItem('uid');
     if (savedId) {
       setUid(savedId);
     }
@@ -813,7 +813,7 @@ export default function App() {
       : "anon_" + Math.random().toString(36).substring(2, 8);
 
   setUid(newId);
-  localStorage.setItem("uid", newId);
+  sessionStorage.setItem('uid', id);
 
   showToast(`Welcome ${newId}`, "info");
 };
@@ -914,11 +914,8 @@ export default function App() {
   };
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't trigger shortcuts if user is typing in an input or textarea
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
-        return;
-      }
+  setUid(null);
+}, []);
 
       if (e.key === 'n' || e.key === 'p') {
         setIsPostModalOpen(true);
