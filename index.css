@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Spline Sans", sans-serif;
+  --color-primary: #ee2bad;
+  --color-background-dark: #120810;
+  --color-background-light: #f8f6f7;
+}
+
+@layer base {
+  body {
+    @apply font-display bg-background-dark text-slate-100;
+  }
+}
+
+.glass-card {
+  background: rgba(238, 43, 173, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(238, 43, 173, 0.1);
+}
+
+.neon-shadow:hover {
+  box-shadow: 0 0 15px rgba(238, 43, 173, 0.4);
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
