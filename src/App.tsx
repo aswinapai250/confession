@@ -806,21 +806,23 @@ export default function App() {
     }
   }, []);
 
-  const handleLogin = async (id?: string) => {
+ const handleLogin = async (id?: string) => {
   const newId =
     id && id.trim()
-      ? id
+      ? id.trim()
       : "anon_" + Math.random().toString(36).substring(2, 8);
 
   setUid(newId);
-  sessionStorage.setItem('uid', id);
+
+  // store correct value
+  sessionStorage.setItem("uid", newId);
 
   showToast(`Welcome ${newId}`, "info");
 };
 
   const handleLogout = () => {
     // Clear all local storage first
-    localStorage.removeItem('uid');
+    sessionStorage.removeItem('uid');
     
     // Reset all states to initial values
     setUid(null);
@@ -914,35 +916,34 @@ export default function App() {
   };
 
   useEffect(() => {
-  setUid(null);
-}, []);
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'n' || e.key === 'p') {
+      setIsPostModalOpen(true);
+    } else if (e.key === 'Escape') {
+      setIsPostModalOpen(false);
+      setIsNotificationModalOpen(false);
+      setSelectedConfession(null);
+      setSelectedConfessionId(null);
+    } else if (e.key === '1') {
+      setSort('trending');
+    } else if (e.key === '2') {
+      setSort('latest');
+    } else if (e.key === '3') {
+      setSort('most-reacted');
+    } else if (e.key === '/') {
+      e.preventDefault();
+      const searchInput = document.querySelector(
+        'input[placeholder="Search secrets..."]'
+      ) as HTMLInputElement;
+      searchInput?.focus();
+    }
+  };
 
-      if (e.key === 'n' || e.key === 'p') {
-        setIsPostModalOpen(true);
-      } else if (e.key === 'Escape') {
-        setIsPostModalOpen(false);
-        setIsNotificationModalOpen(false);
-        setSelectedConfession(null);
-        setSelectedConfessionId(null);
-      } else if (e.key === '1') {
-        setSort('trending');
-      } else if (e.key === '2') {
-        setSort('latest');
-      } else if (e.key === '3') {
-        setSort('most-reacted');
-      } else if (e.key === '/') {
-        e.preventDefault();
-        const searchInput = document.querySelector('input[placeholder="Search secrets..."]') as HTMLInputElement;
-        searchInput?.focus();
-      }
-    };
+  window.addEventListener('keydown', handleKeyDown);
 
-    window.addEventListener('keydown', handleKeyDown);
-
-return () => {
-  window.removeEventListener('keydown', handleKeyDown);
-
-
+  return () => {
+    window.removeEventListener('keydown', handleKeyDown);
+  };
 }, []);
 
   useEffect(() => {
