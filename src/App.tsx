@@ -810,6 +810,7 @@ const LoginScreen = ({ onLogin }: { onLogin: (id: string) => void }) => {
 // --- Main App ---
 
 export default function App() {
+  console.log("new test build");
   const [memeSound, setMemeSound] = useState(true);
   const [confessions, setConfessions] = useState<Confession[]>([]);
   const [activeConfessions, setActiveConfessions] = useState<Confession[]>([]);
