@@ -1240,6 +1240,7 @@ export default function App() {
 
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+      <h1 style={{ color: "red", fontSize: "40px" }}>test deploy</h1>
       <Navbar
         onSearch={setSearch}
         notifications={notifications}
