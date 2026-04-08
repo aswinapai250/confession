@@ -626,7 +626,7 @@ const ConfessionComposer = ({
       >
         <button 
           onClick={onClose} 
-          className="absolute top-8 right-8 p-2 text-slate-500 hover:text-white hover:bg-white/10 rounded-full transition-all"
+          className="absolute top-8 right-8 p-3 text-white hover:bg-white/20 rounded-full transition-all shadow-lg"
           title="Close Composer"
         >
           <X className="size-6" />
@@ -1420,14 +1420,14 @@ const AccessPortal = ({ onLogin, onAdminLogin }: AccessPortalProps) => {
                 <input 
                   type="text"
                   placeholder="Your Secret Identity..."
-                  className="w-full bg-primary/5 border border-primary/20 rounded-2xl px-6 py-4 text-lg focus:outline-none focus:border-primary/50 transition-all text-center pr-14"
+                  className="w-full bg-white/[0.05] border border-white/10 rounded-2xl px-6 py-4 text-lg focus:outline-none focus:border-primary/50 transition-all text-center pr-14 placeholder:text-slate-600"
                   value={id}
                   onChange={(e) => setId(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && id.trim() && handleInitialSubmit()}
                 />
                 <button
                   onClick={generateUsername}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-primary hover:text-white hover:bg-primary/20 rounded-xl transition-all"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-primary hover:text-white hover:bg-white/10 rounded-xl transition-all"
                   title="Generate Identity"
                 >
                   <Dices className="size-5" />
@@ -1721,24 +1721,36 @@ const PublicFeed = ({
       </div>
 
       {/* Mobile Bottom Nav */}
-      <nav className="lg:hidden sticky bottom-0 z-50 flex items-center justify-around bg-background-dark/95 backdrop-blur-lg border-t border-white/5 px-6 py-4">
-        <button className={cn(sort === 'trending' ? "text-primary" : "text-slate-500")} onClick={() => setSort('trending')}>
+      <nav className="lg:hidden sticky bottom-0 z-50 flex items-center justify-around bg-background-dark/95 backdrop-blur-2xl border-t border-white/5 px-6 py-4 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+        <button 
+          className={cn("relative transition-all", sort === 'trending' ? "text-primary scale-110" : "text-slate-500")} 
+          onClick={() => setSort('trending')}
+        >
           <Flame className="size-7" />
+          {sort === 'trending' && <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full shadow-[0_0_8px_rgba(0,255,157,0.8)]" />}
         </button>
-        <button className={cn(sort === 'latest' ? "text-primary" : "text-slate-500")} onClick={() => setSort('latest')}>
+        <button 
+          className={cn("relative transition-all", sort === 'latest' ? "text-primary scale-110" : "text-slate-500")} 
+          onClick={() => setSort('latest')}
+        >
           <Compass className="size-7" />
+          {sort === 'latest' && <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full shadow-[0_0_8px_rgba(0,255,157,0.8)]" />}
         </button>
         <button
           onClick={() => setIsPostModalOpen(true)}
-          className="flex items-center justify-center size-12 bg-primary rounded-full text-white shadow-lg shadow-primary/40 -translate-y-6 border-4 border-background-dark"
+          className="flex items-center justify-center size-14 bg-primary rounded-full text-white shadow-[0_0_25px_rgba(0,255,157,0.4)] -translate-y-8 border-8 border-background-dark hover:scale-105 active:scale-95 transition-all"
         >
-          <Plus className="size-8" />
+          <Plus className="size-10" />
         </button>
-        <button className={cn(sort === 'most-reacted' ? "text-primary" : "text-slate-500")} onClick={() => setSort('most-reacted')}>
+        <button 
+          className={cn("relative transition-all", sort === 'most-reacted' ? "text-primary scale-110" : "text-slate-500")} 
+          onClick={() => setSort('most-reacted')}
+        >
           <Heart className="size-7" />
+          {sort === 'most-reacted' && <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full shadow-[0_0_8px_rgba(0,255,157,0.8)]" />}
         </button>
         <button
-          className="text-slate-500"
+          className="text-slate-500 relative"
           onClick={() => setIsNotificationModalOpen(true)}
         >
           <Bell className="size-7" />
@@ -1751,6 +1763,9 @@ const PublicFeed = ({
         </p>
         <p className="mt-1 opacity-70">
           All posts are anonymous. Do not share personal or sensitive information.
+        </p>
+        <p className="mt-4 text-[10px] text-primary/40 font-bold uppercase tracking-widest">
+          any changes u need contact dev god
         </p>
       </footer>
     </>
@@ -2116,14 +2131,17 @@ export default function App() {
   }, [selectedConfessionId, uid]);
 
   const handlePost = async (data: any) => {
+    if (!data.content || !data.content.trim()) {
+      showToast("A confession cannot be empty.", "info");
+      return;
+    }
+
     try {
       const payload = {
-        content: data.content,
+        content: data.content.trim(),
         category: data.category,
         uid: uid
       };
-
-      console.log("Supabase Insert Payload:", payload);
 
       const { data: newPost, error } = await supabase
         .from('confessions')
@@ -2235,6 +2253,10 @@ export default function App() {
   };
 
   const handleReply = async (content: string) => {
+    if (!content || !content.trim()) {
+      showToast("Reply cannot be empty", "info");
+      return;
+    }
     if (!isAdmin && !hasUserPosted) {
       showToast("You must share a confession first before participating!", "info");
       return;
@@ -2347,6 +2369,15 @@ export default function App() {
       showToast("Confession deleted.");
       fetchConfessions();
       fetchTotalCount();
+      
+      // Update posted status
+      const { count } = await supabase
+        .from('confessions')
+        .select('*', { count: 'exact', head: true })
+        .eq('uid', uid);
+      
+      if (count === 0) setHasUserPosted(false);
+
       if (selectedConfessionId === id) {
         setSelectedConfession(null);
         setSelectedConfessionId(null);
