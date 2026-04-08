@@ -1446,7 +1446,7 @@ export default function App() {
       )}
 
       {/* Login Overlay */}
-      {!uid && <LoginScreen onLogin={handleLogin} />}
+      {/*{!uid && <LoginScreen onLogin={handleLogin} />} */}
       <footer className="w-full border-t border-white/5 mt-20 py-6 text-center text-xs text-slate-500">
         <p className="mb-2">
           Confeshion — An anonymous social experiment exploring privacy-first interactions.
