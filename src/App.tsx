@@ -810,7 +810,6 @@ const LoginScreen = ({ onLogin }: { onLogin: (id: string) => void }) => {
 // --- Main App ---
 
 export default function App() {
-  console.log("new test build");
   const [memeSound, setMemeSound] = useState(true);
   const [confessions, setConfessions] = useState<Confession[]>([]);
   const [activeConfessions, setActiveConfessions] = useState<Confession[]>([]);
@@ -825,7 +824,7 @@ export default function App() {
   const [myConfessions, setMyConfessions] = useState<string[]>([]);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [uid, setUid] = useState<string | null>(null);
-  const socketRef = useRef<WebSocket | null>(null);
+  const socketRef = useRef<WebSocket | null>("test-user");
 
   const handleCategoryClick = (cat: string) => {
     setCategory(cat);
